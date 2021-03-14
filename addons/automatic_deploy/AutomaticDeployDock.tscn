@@ -1,0 +1,114 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/automatic_deploy/AutomaticDeployDock.gd" type="Script" id=1]
+
+[node name="Deploy" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+_api_token_edit_path = NodePath("VBoxContainer/HBoxContainer/ApiTokenEdit")
+_log_label_path = NodePath("VBoxContainer/LogLabel")
+_copy_site_button_path = NodePath("VBoxContainer/CopySiteButton")
+_success_label_path = NodePath("VBoxContainer/SuccessfullyDeployed")
+_error_label_path = NodePath("VBoxContainer/ErrorLabel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AccessTokenSite" type="Button" parent="VBoxContainer"]
+margin_right = 1024.0
+margin_bottom = 20.0
+text = "Open Personal Access Token Site"
+clip_text = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 24.0
+margin_right = 1024.0
+margin_bottom = 48.0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_top = 5.0
+margin_right = 510.0
+margin_bottom = 19.0
+size_flags_horizontal = 3
+text = "Token"
+
+[node name="ApiTokenEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+margin_left = 514.0
+margin_right = 1024.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+secret = true
+placeholder_text = "Personal Access Token"
+
+[node name="ErrorLabel" type="Label" parent="VBoxContainer"]
+visible = false
+margin_top = 52.0
+margin_right = 1024.0
+margin_bottom = 66.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+text = "Error"
+align = 1
+autowrap = true
+
+[node name="DeployButton" type="Button" parent="VBoxContainer"]
+margin_top = 52.0
+margin_right = 1024.0
+margin_bottom = 72.0
+size_flags_horizontal = 3
+text = "deploy"
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CopySiteButton" type="Button" parent="VBoxContainer"]
+visible = false
+margin_top = 104.0
+margin_right = 1024.0
+margin_bottom = 124.0
+text = "Copy Site URL"
+
+[node name="SuccessfullyDeployed" type="Label" parent="VBoxContainer"]
+visible = false
+margin_top = 76.0
+margin_right = 1024.0
+margin_bottom = 90.0
+custom_colors/font_color = Color( 0.0588235, 1, 0.0941176, 1 )
+text = "Successfully Deployed"
+align = 1
+autowrap = true
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 76.0
+margin_right = 1024.0
+margin_bottom = 80.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_top = 84.0
+margin_right = 1024.0
+margin_bottom = 98.0
+text = "Log"
+align = 1
+
+[node name="LogLabel" type="TextEdit" parent="VBoxContainer"]
+margin_top = 102.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+readonly = true
+wrap_enabled = true
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+[connection signal="pressed" from="VBoxContainer/AccessTokenSite" to="." method="_on_AccessTokenSite_pressed"]
+[connection signal="text_changed" from="VBoxContainer/HBoxContainer/ApiTokenEdit" to="." method="_on_ApiTokenEdit_text_changed"]
+[connection signal="pressed" from="VBoxContainer/DeployButton" to="." method="_on_DeployButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/CopySiteButton" to="." method="_on_CopySiteButton_pressed"]
