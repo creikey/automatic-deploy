@@ -69,15 +69,18 @@ func _on_DeployButton_pressed():
 	# export the project with the godot executable
 	var output = []
 	var index_html_path: String = str(BUILD_OUTPUT_FOLDER, "/index.html")
-	OS.execute(OS.get_executable_path(), ["--path", ProjectSettings.globalize_path("res://"), "--export-debug", "HTML5", ProjectSettings.globalize_path(index_html_path)], true, output)
+	var exit_code: int = OS.execute(OS.get_executable_path(), ["--path", ProjectSettings.globalize_path("res://"), "--export-debug", "HTML5", ProjectSettings.globalize_path(index_html_path)], true, output)
 	print_to_log("Exported using godot executable to ", ProjectSettings.globalize_path(index_html_path))
-	
+	if exit_code != 0:
+		_show_error(str("Error exporting from godot, exit code: ", exit_code, ". Do you have an HTML5 export called HTML5 setup?"))
+		return
+		
 	# zip it into a zip file TODO add linux and mac commands to do this
 	output = []
 	var target_zip_local_path: String = str(BUILD_OUTPUT_FOLDER, ".zip")
 	var target_zip_path: String = ProjectSettings.globalize_path(target_zip_local_path).replace("/", "\\")
 	var target_folder_path: String = ProjectSettings.globalize_path(BUILD_OUTPUT_FOLDER).replace("/", "\\")
-	var exit_code: int = OS.execute("CMD.exe", ["/C", "tar.exe", "-a", "-c", "-f", target_zip_path, target_folder_path], true, output)
+	exit_code = OS.execute("CMD.exe", ["/C", "tar.exe", "-a", "-c", "-f", target_zip_path, target_folder_path], true, output)
 	print_to_log("Zipped build folder with exit code: ", exit_code)
 
 	if _must_create_site:
